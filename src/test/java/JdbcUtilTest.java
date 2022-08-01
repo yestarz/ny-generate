@@ -12,9 +12,9 @@ public class JdbcUtilTest {
     @Test
     public void test1(){
         DatabaseProperties databaseProperties = new DatabaseProperties();
-        databaseProperties.setJdbcUrl("jdbc:mysql://192.168.1.245:3306/yunyutong_test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai");
+        databaseProperties.setJdbcUrl("jdbc:mysql://192.168.0.101:3306/yunyutong_dev?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai");
         databaseProperties.setUsername("root");
-        databaseProperties.setPassword("root");
+        databaseProperties.setPassword("123456");
         databaseProperties.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         TableInfo tableInfo = JdbcUtils.getTableInfo("yz_item_tab", databaseProperties);

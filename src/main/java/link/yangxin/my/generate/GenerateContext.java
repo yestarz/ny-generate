@@ -87,6 +87,24 @@ public class GenerateContext {
      */
     private String serviceImplPackage;
 
+    private String voName;
+
+    private String voPackage;
+
+    private String voDir;
+
+    private String createRequestName;
+
+    private String createRequestPackage;
+
+    private String createRequestDir;
+
+    private String queryRequestName;
+
+    private String queryRequestPackage;
+
+    private String queryRequestDir;
+
     public GenerateContext(Config config, DatabaseProperties databaseProperties) {
         this.tableInfo = JdbcUtils.getTableInfo(config.getTableName(), databaseProperties);
 
@@ -111,6 +129,20 @@ public class GenerateContext {
         serviceImplDir = serviceDir + File.separator + "impl";
         serviceImplName = serviceName + "Impl";
         serviceImplPackage = servicePackage + ".impl";
+
+
+        voName = entityName + "VO";
+        voDir = config.isDirContainsModule() ? config.getVoDir() : (config.getVoDir() + File.separator + config.getModuleName());
+        voPackage = config.isPackageContainsModule() ? config.getVoPackageName() : (config.getVoPackageName() + "." + config.getModuleName());
+
+        createRequestName = entityName + "CreateRequest";
+        createRequestDir = config.isDirContainsModule() ? config.getCreateRequestDir() : (config.getCreateRequestDir() + File.separator + config.getModuleName());
+        createRequestPackage = config.isPackageContainsModule() ? config.getCreateRequestPackageName() : (config.getCreateRequestPackageName() + "." + config.getModuleName());
+
+
+        queryRequestName = entityName + "QueryRequest";
+        queryRequestDir = config.isDirContainsModule() ? config.getQueryRequestDir() : (config.getQueryRequestDir() + File.separator + config.getModuleName());
+        queryRequestPackage = config.isPackageContainsModule() ? config.getQueryRequestPackageName() : (config.getQueryRequestPackageName() + "." + config.getModuleName());
     }
 
     /**
@@ -120,6 +152,33 @@ public class GenerateContext {
      */
     public String getEntityFilePath() {
         return entityDir + File.separator + entityName + ".java";
+    }
+
+    /**
+     * 获取vO类的文件路径
+     *
+     * @return
+     */
+    public String getVOFilePath() {
+        return voDir + File.separator + voName + ".java";
+    }
+    /**
+     * 获取vO类的文件路径
+     *
+     * @return
+     */
+    public String getCreateRequestFilePath() {
+        return createRequestDir + File.separator + createRequestName + ".java";
+    }
+
+
+    /**
+     * 获取查询请求文件路径
+     *
+     * @return
+     */
+    public String getQueryRequestFilePath() {
+        return queryRequestDir + File.separator + queryRequestName + ".java";
     }
 
     /**

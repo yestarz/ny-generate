@@ -23,7 +23,7 @@
         <sql id="Base_Column_List">
             <!--@sql select -->
            ${allColumns!}
-            <!--@sql from ${tableName!} -->
+            <!--@sql from ${tableName!} t -->
         </sql>
     </#if>
 </mapper>

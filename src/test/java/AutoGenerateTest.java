@@ -8,8 +8,11 @@ import link.yangxin.my.generate.po.DatabaseProperties;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author yangxin
@@ -21,23 +24,33 @@ public class AutoGenerateTest {
 
     Config config = new Config();
 
+    private String tableName = "hospital_home_page_tab";
+
+    private String moduleName = "hospital";
+
     @Before
     public void init() {
-        databaseProperties.setJdbcUrl("jdbc:mysql://192.168.1.245:3306/yunyutong_test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai");
+        databaseProperties.setJdbcUrl("jdbc:mysql://192.168.0.101:3306/yunyutong_dev?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai");
         databaseProperties.setUsername("root");
-        databaseProperties.setPassword("root");
+        databaseProperties.setPassword("123456");
         databaseProperties.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         config.setCamel(false);
-        config.setModuleName("sys");
-        config.setTableName("sys_admin_tab");
-        config.setDaoDir("F:\\yx\\git\\yunyutong-new\\mami-guardian\\src\\main\\java\\com\\yyt\\yunyutong\\mamiguardian\\mapper");
-        config.setServiceDir("F:\\yx\\git\\yunyutong-new\\mami-guardian\\src\\main\\java\\com\\yyt\\yunyutong\\mamiguardian\\service");
-        config.setXmlDir("F:\\yx\\git\\yunyutong-new\\mami-guardian\\src\\main\\resources\\mapper");
-        config.setEntityDir("F:\\yx\\git\\yunyutong-new\\mami-guardian\\src\\main\\java\\com\\yyt\\yunyutong\\mamiguardian\\entity");
-        config.setDaoPackageName("com.yyt.yunyutong.mamiguardian.mapper");
-        config.setServicePackageName("com.yyt.yunyutong.mamiguardian.service");
-        config.setEntityPackageName("com.yyt.yunyutong.mamiguardian.entity");
+        config.setModuleName(moduleName);
+        config.setTableName(tableName);
+        config.setDaoDir("E:\\code\\yunyu-health-parent\\yunyu-health-backend\\yunyu-health-dao\\src\\main\\java\\com\\kangyouyun\\yunyuhealth\\dao\\mapper");
+        config.setServiceDir("E:\\code\\yunyu-health-parent\\yunyu-health-backend\\yunyu-health-service\\src\\main\\java\\com\\kangyouyun\\yunyuhealth\\service");
+        config.setXmlDir("E:\\code\\yunyu-health-parent\\yunyu-health-backend\\yunyu-health-dao\\src\\main\\resources\\mapperxml");
+        config.setEntityDir("E:\\code\\yunyu-health-parent\\yunyu-health-backend\\yunyu-health-entity\\src\\main\\java\\com\\kangyouyun\\yunyuhealth\\entity\\dbo");
+        config.setVoDir("E:\\code\\yunyu-health-parent\\yunyu-health-backend\\yunyu-health-entity\\src\\main\\java\\com\\kangyouyun\\yunyuhealth\\entity\\vo");
+        config.setCreateRequestDir("E:\\code\\yunyu-health-parent\\yunyu-health-backend\\yunyu-health-entity\\src\\main\\java\\com\\kangyouyun\\yunyuhealth\\entity\\request");
+        config.setQueryRequestDir("E:\\code\\yunyu-health-parent\\yunyu-health-backend\\yunyu-health-entity\\src\\main\\java\\com\\kangyouyun\\yunyuhealth\\entity\\request");
+        config.setDaoPackageName("com.kangyouyun.yunyuhealth.dao.mapper");
+        config.setServicePackageName("com.kangyouyun.yunyuhealth.service");
+        config.setEntityPackageName("com.kangyouyun.yunyuhealth.entity.dbo");
+        config.setVoPackageName("com.kangyouyun.yunyuhealth.entity.vo");
+        config.setCreateRequestPackageName("com.kangyouyun.yunyuhealth.entity.request");
+        config.setQueryRequestPackageName("com.kangyouyun.yunyuhealth.entity.request");
         config.setDirContainsModule(false);
         config.setPackageContainsModule(false);
         config.setSwagger(true);
@@ -45,7 +58,7 @@ public class AutoGenerateTest {
         config.setGenerateService(true);
         config.setGenerateMapperXml(true);
         config.setGenerateDao(true);
-        config.setEntityNameConvert(new DefaultEntityNameConvert(null,"Tab"));
+        config.setEntityNameConvert(new DefaultEntityNameConvert(null, "Tab"));
         config.setSuperEntityClass(SysBase.class);
         config.setFieldConvert(new MysqlFieldConvert());
 
@@ -77,9 +90,21 @@ public class AutoGenerateTest {
 
 
     @Test
-    public void test1111(){
+    public void test1111() {
         Field[] fields = ReflectUtil.getFields(SysBase.class, field -> !field.getName().equals("serialVersionUID"));
-        Arrays.stream(fields).forEach(t-> System.out.println(t.getName()));
+        Arrays.stream(fields).forEach(t -> System.out.println(t.getName()));
+    }
+
+    @Test
+    public void testGenerateAll() {
+        AutoGenerate autoGenerate = new AutoGenerate(config, databaseProperties);
+        autoGenerate.generateEntity();
+        autoGenerate.generateDao();
+        autoGenerate.generateMapperXml();
+        autoGenerate.generateService();
+        autoGenerate.generateVO();
+        autoGenerate.generateCreateRequest();
+        autoGenerate.generateQueryRequest();
     }
 
 }

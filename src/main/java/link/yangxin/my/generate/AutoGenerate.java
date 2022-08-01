@@ -43,6 +43,7 @@ public class AutoGenerate {
         param.put("entity", context.getEntityName());
         if (config.getSuperEntityClass() != null) {
             param.put("superEntityClass", config.getSuperEntityClass().getSimpleName());
+            param.put("superEntityClass", "com.kangyouyun.yunyuhealth.entity.base.SysBase");
         }
         dealSuperEntityClass(config.getSuperEntityClass());
 
@@ -60,6 +61,97 @@ public class AutoGenerate {
         param.put("importPackages", importPackages);
 
         String string = FreemarkerUtils.freemarkerTemplateString("template/entity.ftl", param);
+        FileUtil.writeBytes(string.getBytes(StandardCharsets.UTF_8), file);
+    }
+
+    public void generateVO() {
+        File file = new File(context.getVOFilePath());
+        if (file.exists()) {
+            //throw new RuntimeException("VO已存在");
+        }
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("package", context.getVoPackage());
+        param.put("swagger", config.isSwagger());
+        param.put("author", config.getAuthor());
+        param.put("date", DateUtil.formatDate(new Date()));
+        param.put("table", context.getTableInfo());
+
+        param.put("entity", context.getVoName());
+
+        dealSuperEntityClass(config.getSuperEntityClass());
+
+        List<Column> columnList = context.getTableInfo().getEntityColumnList();
+        Set<String> importPackages = new HashSet<>();
+        for (Column column : columnList) {
+            if (!column.getDbColumnType().isBaseDataType()) {
+                importPackages.add(column.getDbColumnType().getClazz().getName());
+            }
+        }
+
+        param.put("importPackages", importPackages);
+
+        String string = FreemarkerUtils.freemarkerTemplateString("template/vo.ftl", param);
+        FileUtil.writeBytes(string.getBytes(StandardCharsets.UTF_8), file);
+    }
+
+    public void generateCreateRequest() {
+        File file = new File(context.getCreateRequestFilePath());
+        if (file.exists()) {
+           // throw new RuntimeException("CreateRequest已存在");
+        }
+        Map<String, Object> param = new HashMap<>();
+        param.put("package", context.getCreateRequestPackage());
+        param.put("swagger", config.isSwagger());
+        param.put("author", config.getAuthor());
+        param.put("date", DateUtil.formatDate(new Date()));
+        param.put("table", context.getTableInfo());
+
+        param.put("entity", context.getCreateRequestName());
+
+        dealSuperEntityClass(config.getSuperEntityClass());
+
+        List<Column> columnList = context.getTableInfo().getEntityColumnList();
+        Set<String> importPackages = new HashSet<>();
+        for (Column column : columnList) {
+            if (!column.getDbColumnType().isBaseDataType()) {
+                importPackages.add(column.getDbColumnType().getClazz().getName());
+            }
+        }
+
+        param.put("importPackages", importPackages);
+
+        String string = FreemarkerUtils.freemarkerTemplateString("template/createRequest.ftl", param);
+        FileUtil.writeBytes(string.getBytes(StandardCharsets.UTF_8), file);
+    }
+    public void generateQueryRequest() {
+        File file = new File(context.getQueryRequestFilePath());
+        if (file.exists()) {
+            //throw new RuntimeException("QueryRequest已存在");
+        }
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("package", context.getQueryRequestPackage());
+        param.put("swagger", config.isSwagger());
+        param.put("author", config.getAuthor());
+        param.put("date", DateUtil.formatDate(new Date()));
+        param.put("table", context.getTableInfo());
+
+        param.put("entity", context.getQueryRequestName());
+
+        dealSuperEntityClass(config.getSuperEntityClass());
+
+        List<Column> columnList = context.getTableInfo().getEntityColumnList();
+        Set<String> importPackages = new HashSet<>();
+        for (Column column : columnList) {
+            if (!column.getDbColumnType().isBaseDataType()) {
+                importPackages.add(column.getDbColumnType().getClazz().getName());
+            }
+        }
+
+        param.put("importPackages", importPackages);
+
+        String string = FreemarkerUtils.freemarkerTemplateString("template/queryRequest.ftl", param);
         FileUtil.writeBytes(string.getBytes(StandardCharsets.UTF_8), file);
     }
 
@@ -90,7 +182,7 @@ public class AutoGenerate {
         param.put("table", context.getTableInfo());
         param.put("baseResultMap", true);
         param.put("baseColumnList", true);
-        param.put("allColumns", StrUtil.join(",", context.getTableInfo().getColumnList().stream().map(t -> "`" + t.getName() + "`").collect(Collectors.toList())));
+        param.put("allColumns", StrUtil.join(",", context.getTableInfo().getColumnList().stream().map(t -> "t.`" + t.getName() + "`").collect(Collectors.toList())));
         param.put("tableName", context.getTableInfo().getTableName());
 
         String string = FreemarkerUtils.freemarkerTemplateString("template/mapper.xml.ftl", param);

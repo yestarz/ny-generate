@@ -126,4 +126,16 @@ public class Config {
     private String daoSuffix = "Dao";
 
 
+    // 生成VO对象的配置
+    private String voDir;
+    private String voPackageName;
+
+    // 生成createRequest的配置
+    private String createRequestDir;
+    private String createRequestPackageName;
+
+    // 生成queryRequest的配置
+    private String queryRequestDir;
+    private String queryRequestPackageName;
+
 }
